@@ -1,13 +1,14 @@
 import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "../boot/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 export function registerUser(email, password, userData) {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      // Signed up
       const user = userCredential.user;
-      // Push user data to Firestore
       if (user) {
         const userRef = doc(firestore, "users", user.uid);
         setDoc(userRef, userData)
@@ -26,16 +27,16 @@ export function registerUser(email, password, userData) {
       // Handle error
     });
 }
-export function signIn(email, password) {
-  auth
-    .signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in
-      const user = userCredential.user;
-      // ...
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-    });
+
+export async function signIn(email, password) {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return userCredential.user;
+  } catch (error) {
+    throw error;
+  }
 }

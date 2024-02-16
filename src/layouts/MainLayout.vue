@@ -9,6 +9,12 @@
         <div class="text-primary">{{ userMajor }}</div>
       </div>
 
+      <q-img
+        class="absolute-left"
+        src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExczdqdXJjbWRoZjhhajlwZGRnY2d1dGFpMzVpeXJrdzMzbHA2NXcycyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W4UOZK3EacuywD9reC/giphy.gif"
+        width="30px"
+      ></q-img>
+
       <q-tabs
         v-model="tab"
         active-class="text-weight-bolder text-purple"
