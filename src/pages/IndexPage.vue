@@ -1,13 +1,20 @@
 <template>
-  <q-page class="flex flex-center">
-    <div class="text-h1">MajorBlend</div>
+  <q-page>
+    <div class="text-subtitle1">자유게시판</div>
+    <q-list bordered separator>
+      <q-item>sad</q-item>
+      <q-item>sad</q-item>
+      <q-item>sad</q-item>
+      <q-item>sad</q-item>
+      <q-item>sad</q-item>
+    </q-list>
   </q-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'IndexPage'
-})
+  name: "IndexPage",
+});
 </script>
