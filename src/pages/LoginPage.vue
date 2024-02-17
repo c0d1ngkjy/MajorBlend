@@ -32,6 +32,7 @@
         <div
           @click="$router.push('register')"
           class="cursor-pointer text-grey text-center"
+          style="text-decoration: underline"
         >
           회원가입
         </div>
@@ -41,12 +42,18 @@
 </template>
 
 <script>
+import { useQuasar } from "quasar";
 import { signIn } from "src/services/auth";
+import { useAuthStore } from "src/stores/authStore";
 import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "LoginPage",
   setup() {
+    const $q = useQuasar();
+    const $router = useRouter();
+    const authStore = useAuthStore();
     const emailInput = ref();
     const pwInput = ref();
 
@@ -56,12 +63,22 @@ export default defineComponent({
     async function onSubmit() {
       if (validateForm()) {
         try {
-          const res = await signIn(emailInput.value, pwInput.value);
-          console.log(res);
-          //store uid to userStore
-          //send to homepage
+          const user = await signIn(emailInput.value, pwInput.value);
+          authStore.setUser(user);
+          $q.notify({
+            color: "primary",
+            textColor: "white",
+            message: "로그인 성공",
+          });
+          $router.push("/");
         } catch (error) {
           console.error(error);
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: "아이디 또는 비밀번호를 확인하세요",
+          });
         }
       }
     }

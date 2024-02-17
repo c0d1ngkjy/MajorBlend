@@ -3,11 +3,6 @@
     <q-form @submit="onSubmit" @reset="onReset">
       <q-card class="q-pa-lg q-gutter-y-md" bordered style="min-width: 400px">
         <div>
-          <div>아이디</div>
-          <q-input dense outlined v-model="idInput" :rules="idRules"></q-input>
-        </div>
-
-        <div>
           <div>이메일</div>
           <q-input
             dense
@@ -85,18 +80,11 @@ export default defineComponent({
     const $q = useQuasar();
     const $router = useRouter();
 
-    const idInput = ref("");
     const emailInput = ref("");
     const pwInput = ref("");
     const pwCheck = ref("");
     const nameInput = ref("");
     const majorInput = ref("");
-
-    const idRules = [
-      (val) => !!val || "아이디를 입력해주세요",
-      (val) =>
-        /^[a-zA-Z0-9]+$/.test(val) || "아이디는 영문자와 숫자만 허용됩니다",
-    ];
 
     const emailRules = [
       (val) => !!val || "이메일을 입력해주세요",
@@ -119,26 +107,39 @@ export default defineComponent({
 
     const majorRules = [(val) => !!val || "전공을 입력해주세요"];
 
-    function onSubmit() {
+    async function onSubmit() {
       if (validateForm()) {
         const userData = {
-          userId: idInput.value,
           email: emailInput.value,
           pw: pwInput.value,
           name: nameInput.value,
           major: majorInput.value,
         };
 
-        const res = registerUser(emailInput.value, pwInput.value, userData);
+        try {
+          const res = await registerUser(
+            emailInput.value,
+            pwInput.value,
+            userData
+          );
+          console.log(res);
+          $q.notify({
+            color: "primary",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "회원가입 완료",
+          });
 
-        $q.notify({
-          color: "primary",
-          textColor: "white",
-          icon: "cloud_done",
-          message: "회원가입 완료",
-        });
-
-        $router.push("/login");
+          $router.push("/login");
+        } catch (error) {
+          console.error(error);
+          $q.notify({
+            color: "red-5",
+            textColor: "white",
+            icon: "warning",
+            message: "회원가입 중 오류가 발생했습니다",
+          });
+        }
       } else {
         $q.notify({
           color: "red-5",
@@ -150,7 +151,6 @@ export default defineComponent({
     }
 
     function onReset() {
-      idInput.value = "";
       emailInput.value = "";
       pwInput.value = "";
       pwCheck.value = "";
@@ -160,7 +160,6 @@ export default defineComponent({
 
     function validateForm() {
       return (
-        idRules.every((rule) => rule(idInput.value)) &&
         emailRules.every((rule) => rule(emailInput.value)) &&
         pwRules.every((rule) => rule(pwInput.value)) &&
         pwCheckRules.every((rule) => rule(pwCheck.value)) &&
@@ -170,13 +169,11 @@ export default defineComponent({
     }
 
     return {
-      idInput,
       emailInput,
       pwInput,
       pwCheck,
       nameInput,
       majorInput,
-      idRules,
       emailRules,
       pwRules,
       pwCheckRules,

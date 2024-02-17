@@ -9,12 +9,6 @@
         <div class="text-primary">{{ userMajor }}</div>
       </div>
 
-      <q-img
-        class="absolute-left"
-        src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExczdqdXJjbWRoZjhhajlwZGRnY2d1dGFpMzVpeXJrdzMzbHA2NXcycyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W4UOZK3EacuywD9reC/giphy.gif"
-        width="30px"
-      ></q-img>
-
       <q-tabs
         v-model="tab"
         active-class="text-weight-bolder text-purple"
@@ -27,7 +21,8 @@
 
       <div class="q-gutter-sm">
         <q-btn to="/nwpost" color="primary" unelevated>글쓰기</q-btn>
-        <q-btn to="/login" outline>로그인</q-btn>
+        <q-btn v-if="!isLoggedIn" to="/login" outline>로그인</q-btn>
+        <q-btn v-if="isLoggedIn" @click="logout" outline>로그아웃</q-btn>
       </div>
     </q-header>
 
@@ -38,24 +33,65 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from "vue";
+import {
+  defineComponent,
+  onBeforeMount,
+  ref,
+  computed,
+  watch,
+  onMounted,
+} from "vue";
+import { useAuthStore } from "src/stores/authStore";
+import { logoutUser } from "src/services/auth";
+import { useQuasar } from "quasar";
 
 export default defineComponent({
   name: "MainLayout",
 
-  components: {},
-
   setup() {
+    const $q = useQuasar();
+    const authStore = useAuthStore();
+    const isAuthenticated = computed(() => authStore.isUserAuthenticated);
+
+    const isLoggedIn = ref(isAuthenticated.value);
+
     onMounted(() => {
       console.log(
         `\x1b[35m\r\n __  __    __     ____  _____  ____  ____  __    ____  _  _  ____  \r\n(  \\\/  )  \/__\\   (_  _)(  _  )(  _ \\(  _ \\(  )  ( ___)( \\( )(  _ \\ \r\n )    (  \/(__)\\ .-_)(   )(_)(  )   \/ ) _ < )(__  )__)  )  (  )(_) )\r\n(_\/\\\/\\_)(__)(__)\\____) (_____)(_)\\_)(____\/(____)(____)(_)\\_)(____\/ \r\n\x1b[0m`
       );
       console.log(`author: codingkjy28`);
+      //console.log(isAuthenticated.value);
     });
+
+    watch(isAuthenticated, (newValue) => {
+      isLoggedIn.value = newValue;
+      //console.log(isLoggedIn.value);
+    });
+
+    onBeforeMount(() => {
+      authStore.restoreAuthState();
+    });
+
+    function logout() {
+      logoutUser()
+        .then(() => {
+          authStore.logout();
+          $q.notify({
+            color: "primary",
+            textColor: "white",
+            message: "로그아웃 성공",
+          });
+        })
+        .catch((error) => {
+          console.error("Error logging out:", error);
+        });
+    }
 
     return {
       tab: ref("nav1"),
-      userMajor: ref("사용자 전공"),
+      userMajor: ref(),
+      isLoggedIn,
+      logout,
     };
   },
 });
