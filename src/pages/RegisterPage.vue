@@ -1,22 +1,19 @@
 <template>
   <q-page class="flex flex-center">
     <q-form @submit="onSubmit" @reset="onReset">
-      <q-card class="q-pa-lg q-gutter-y-md" bordered style="min-width: 400px">
+      <q-card
+        class="q-py-md q-px-lg q-gutter-y-md border-radius-20"
+        style="min-width: 400px"
+      >
         <div>
           <div>이메일</div>
-          <q-input
-            dense
-            outlined
-            v-model="emailInput"
-            :rules="emailRules"
-          ></q-input>
+          <q-input dense v-model="emailInput" :rules="emailRules"></q-input>
         </div>
 
         <div>
           <div>비밀번호</div>
           <q-input
             dense
-            outlined
             v-model="pwInput"
             :rules="pwRules"
             type="password"
@@ -27,7 +24,6 @@
           <div>비밀번호 확인</div>
           <q-input
             dense
-            outlined
             v-model="pwCheck"
             :rules="pwCheckRules"
             type="password"
@@ -36,12 +32,7 @@
 
         <div>
           <div>이름 (실명)</div>
-          <q-input
-            dense
-            outlined
-            v-model="nameInput"
-            :rules="nameRules"
-          ></q-input>
+          <q-input dense v-model="nameInput" :rules="nameRules"></q-input>
         </div>
 
         <div>
@@ -49,17 +40,22 @@
           <div class="text-caption text-red">
             전공은 회원가입 이후 변경 불가합니다
           </div>
-          <q-input
-            dense
-            outlined
-            v-model="majorInput"
-            :rules="majorRules"
-          ></q-input>
+          <q-input dense v-model="majorInput" :rules="majorRules"></q-input>
         </div>
 
         <div class="row q-gutter-sm">
-          <q-btn type="reset" flat color="primary" class="col">초기화</q-btn>
-          <q-btn type="submit" unelevated color="primary" class="col"
+          <q-btn
+            type="reset"
+            outline
+            color="primary"
+            class="col border-radius-20"
+            >초기화</q-btn
+          >
+          <q-btn
+            type="submit"
+            unelevated
+            color="primary"
+            class="col border-radius-20"
             >회원가입</q-btn
           >
         </div>

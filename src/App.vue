@@ -1,5 +1,5 @@
 <template>
-  <router-view class="q-px-xl q-py-sm" />
+  <router-view class="q-px-xl" />
 </template>
 
 <script>

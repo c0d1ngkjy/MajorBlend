@@ -1,15 +1,13 @@
 <template>
   <q-page class="flex flex-center">
     <q-form @submit="onSubmit">
-      <q-card class="q-pa-md q-gutter-y-sm" bordered style="min-width: 350px">
+      <q-card
+        class="q-py-md q-px-lg q-gutter-y-sm border-radius-20"
+        style="min-width: 300px"
+      >
         <div>
           <div>이메일</div>
-          <q-input
-            dense
-            outlined
-            v-model="emailInput"
-            :rules="emailRules"
-          ></q-input>
+          <q-input dense v-model="emailInput" :rules="emailRules"></q-input>
         </div>
 
         <div>
@@ -17,21 +15,24 @@
           <q-input
             type="password"
             dense
-            outlined
             v-model="pwInput"
             :rules="pwRules"
           ></q-input>
         </div>
 
         <div>
-          <q-btn type="submit" class="full-width" unelevated color="primary"
+          <q-btn
+            type="submit"
+            class="full-width border-radius-20"
+            color="primary"
+            unelevated
             >로그인</q-btn
           >
         </div>
 
         <div
           @click="$router.push('register')"
-          class="cursor-pointer text-grey text-center"
+          class="cursor-pointer text-caption text-grey text-center"
           style="text-decoration: underline"
         >
           회원가입

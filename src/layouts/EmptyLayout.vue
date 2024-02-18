@@ -1,59 +1,5 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header
-      class="row justify-between items-center q-py-sm bg-dark text-white"
-      style="padding-left: 300px; padding-right: 300px"
-      elevated
-    >
-      <div>
-        <div
-          @click="$router.push('/')"
-          class="cursor-pointer text-h5 text-weight-bolder"
-        >
-          MajorBlend
-        </div>
-        <div class="text-primary">{{ userMajor }}</div>
-      </div>
-
-      <q-tabs
-        v-model="tab"
-        active-class="text-weight-bolder text-primary"
-        indicator-color="transparent"
-      >
-        <q-tab name="nav1" label="b" />
-        <q-tab name="nav2" label="c" />
-        <q-tab name="nav3" label="a" />
-        <q-tab name="nav3" label="a" />
-      </q-tabs>
-
-      <div class="q-gutter-sm">
-        <q-btn
-          v-if="isLoggedIn"
-          class="border-radius-20"
-          to="/nwpost"
-          color="primary"
-          unelevated
-          >글쓰기</q-btn
-        >
-        <q-btn
-          class="border-radius-20"
-          v-if="!isLoggedIn"
-          color="primary"
-          to="/login"
-          outline
-          >로그인</q-btn
-        >
-        <q-btn
-          class="border-radius-20"
-          v-if="isLoggedIn"
-          color="primary"
-          @click="logout"
-          outline
-          >로그아웃</q-btn
-        >
-      </div>
-    </q-header>
-
     <q-page-container>
       <router-view />
     </q-page-container>
