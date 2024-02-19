@@ -1,5 +1,8 @@
 <template>
-  <q-page class="q-py-md row q-gutter-md" style="padding: 0 200px 0 200px">
+  <q-page
+    class="q-py-md row q-gutter-md"
+    style="padding-left: 10vw; padding-right: 10vw"
+  >
     <div class="col">
       <div class="text-subtitle2">자유게시판</div>
       <q-list dense bordered separator>
@@ -36,9 +39,18 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { Screen } from "quasar";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
   name: "IndexPage",
+
+  setup() {
+    const isMobile = computed(() => Screen.lt.sm);
+
+    return {
+      isMobile,
+    };
+  },
 });
 </script>

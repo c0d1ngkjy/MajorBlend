@@ -1,8 +1,9 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header
-      class="row justify-between items-center q-py-sm bg-dark text-white"
-      style="padding-left: 300px; padding-right: 300px"
+      :class="isMobile ? 'column content-center' : 'row justify-between'"
+      class="items-center q-py-sm bg-dark text-white"
+      style="padding-left: 20vw; padding-right: 20vw"
       elevated
     >
       <div>
@@ -23,7 +24,7 @@
         <q-tab name="nav1" label="b" />
         <q-tab name="nav2" label="c" />
         <q-tab name="nav3" label="a" />
-        <q-tab name="nav3" label="a" />
+        <q-tab name="nav4" label="a" />
       </q-tabs>
 
       <div class="q-gutter-sm">
@@ -33,7 +34,7 @@
           to="/nwpost"
           color="primary"
           unelevated
-          >글쓰기</q-btn
+          >글작성하기</q-btn
         >
         <q-btn
           class="border-radius-20"
@@ -71,7 +72,7 @@ import {
 } from "vue";
 import { useAuthStore } from "src/stores/authStore";
 import { logoutUser } from "src/services/auth";
-import { useQuasar } from "quasar";
+import { Screen, useQuasar } from "quasar";
 
 export default defineComponent({
   name: "MainLayout",
@@ -80,14 +81,15 @@ export default defineComponent({
     const $q = useQuasar();
     const authStore = useAuthStore();
     const isAuthenticated = computed(() => authStore.isUserAuthenticated);
+    const isMobile = computed(() => Screen.lt.sm);
 
     const isLoggedIn = ref(isAuthenticated.value);
 
     onMounted(() => {
       console.log(
-        `\x1b[35m\r\n __  __    __     ____  _____  ____  ____  __    ____  _  _  ____  \r\n(  \\\/  )  \/__\\   (_  _)(  _  )(  _ \\(  _ \\(  )  ( ___)( \\( )(  _ \\ \r\n )    (  \/(__)\\ .-_)(   )(_)(  )   \/ ) _ < )(__  )__)  )  (  )(_) )\r\n(_\/\\\/\\_)(__)(__)\\____) (_____)(_)\\_)(____\/(____)(____)(_)\\_)(____\/ \r\n\x1b[0m`
+        "\x1b[38;2;249;31m\r\n __  __    __     ____  _____  ____  ____  __    ____  _  _  ____  \r\n(  \\\/  )  \/__\\   (_  _)(  _  )(  _ \\(  _ \\(  )  ( ___)( \\( )(  _ \\ \r\n )    (  \/(__)\\ .-_)(   )(_)(  )   \/ ) _ < )(__  )__)  )  (  )(_) )\r\n(_\/\\\/\\_)(__)(__)\\____) (_____)(_)\\_)(____\/(____)(____)(_)\\_)(____\/ \r\n\x1b[0mauthor: codingkjy28"
       );
-      console.log(`author: codingkjy28`);
+
       //console.log(isAuthenticated.value);
     });
 
@@ -120,6 +122,7 @@ export default defineComponent({
       userMajor: ref(),
       isLoggedIn,
       logout,
+      isMobile,
     };
   },
 });
