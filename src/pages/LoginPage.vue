@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <q-form @submit="onSubmit">
       <q-card
-        class="q-py-md q-px-lg q-gutter-y-sm border-radius-20"
+        class="q-py-md q-px-lg q-gutter-y-sm border-radius-10"
         style="min-width: 300px"
       >
         <div>
@@ -23,7 +23,7 @@
         <div>
           <q-btn
             type="submit"
-            class="full-width border-radius-20"
+            class="full-width border-radius-10"
             color="primary"
             unelevated
             >로그인</q-btn

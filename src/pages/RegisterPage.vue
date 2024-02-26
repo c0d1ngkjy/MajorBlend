@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <q-form @submit="onSubmit" @reset="onReset">
       <q-card
-        class="q-py-md q-px-lg q-gutter-y-md border-radius-20"
+        class="q-py-md q-px-lg q-gutter-y-md border-radius-10"
         style="min-width: 400px"
       >
         <div>
@@ -48,14 +48,14 @@
             type="reset"
             outline
             color="primary"
-            class="col border-radius-20"
+            class="col border-radius-10"
             >초기화</q-btn
           >
           <q-btn
             type="submit"
             unelevated
             color="primary"
-            class="col border-radius-20"
+            class="col border-radius-10"
             >회원가입</q-btn
           >
         </div>

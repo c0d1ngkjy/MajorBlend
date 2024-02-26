@@ -2,21 +2,21 @@
   <q-layout view="lHh Lpr lFf">
     <q-header
       :class="isMobile ? 'column content-center' : 'row justify-between'"
-      class="items-center q-py-sm bg-dark text-white"
-      style="padding-left: 20vw; padding-right: 20vw"
+      class="items-center q-py-md bg-dark text-white"
+      style="padding-left: 10vw; padding-right: 10vw"
       elevated
     >
-      <div>
+      <div class="row items-end q-gutter-xs">
         <div
           @click="$router.push('/')"
           class="cursor-pointer text-h5 text-weight-bolder"
         >
           MajorBlend
         </div>
-        <div class="text-primary">{{ userMajor }}</div>
+        <div class="text-primary text-caption">{{ userMajor }}</div>
       </div>
 
-      <q-tabs
+      <!-- <q-tabs
         v-model="tab"
         active-class="text-weight-bolder text-primary"
         indicator-color="transparent"
@@ -25,19 +25,19 @@
         <q-tab name="nav2" label="c" />
         <q-tab name="nav3" label="a" />
         <q-tab name="nav4" label="a" />
-      </q-tabs>
+      </q-tabs> -->
 
       <div class="q-gutter-sm">
         <q-btn
           v-if="isLoggedIn"
-          class="border-radius-20"
+          class="border-radius-10"
           to="/nwpost"
           color="primary"
           unelevated
           >글작성하기</q-btn
         >
         <q-btn
-          class="border-radius-20"
+          class="border-radius-10"
           v-if="!isLoggedIn"
           color="primary"
           to="/login"
@@ -45,7 +45,7 @@
           >로그인</q-btn
         >
         <q-btn
-          class="border-radius-20"
+          class="border-radius-10"
           v-if="isLoggedIn"
           color="primary"
           @click="logout"
@@ -73,6 +73,7 @@ import {
 import { useAuthStore } from "src/stores/authStore";
 import { logoutUser } from "src/services/auth";
 import { Screen, useQuasar } from "quasar";
+import { getUserMajor } from "src/services/user";
 
 export default defineComponent({
   name: "MainLayout",
@@ -82,6 +83,7 @@ export default defineComponent({
     const authStore = useAuthStore();
     const isAuthenticated = computed(() => authStore.isUserAuthenticated);
     const isMobile = computed(() => Screen.lt.sm);
+    const userMajor = ref("");
 
     const isLoggedIn = ref(isAuthenticated.value);
 
@@ -89,22 +91,22 @@ export default defineComponent({
       console.log(
         "\x1b[38;2;249;31m\r\n __  __    __     ____  _____  ____  ____  __    ____  _  _  ____  \r\n(  \\\/  )  \/__\\   (_  _)(  _  )(  _ \\(  _ \\(  )  ( ___)( \\( )(  _ \\ \r\n )    (  \/(__)\\ .-_)(   )(_)(  )   \/ ) _ < )(__  )__)  )  (  )(_) )\r\n(_\/\\\/\\_)(__)(__)\\____) (_____)(_)\\_)(____\/(____)(____)(_)\\_)(____\/ \r\n\x1b[0mauthor: codingkjy28"
       );
-
-      //console.log(isAuthenticated.value);
     });
 
-    watch(isAuthenticated, (newValue) => {
+    watch(isAuthenticated, async (newValue) => {
       isLoggedIn.value = newValue;
-      //console.log(isLoggedIn.value);
+      userMajor.value = await getUserMajor(authStore.user.uid);
     });
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
       authStore.restoreAuthState();
+      userMajor.value = await getUserMajor(authStore.user.uid);
     });
 
     function logout() {
       logoutUser()
         .then(() => {
+          userMajor.value = "";
           authStore.logout();
           $q.notify({
             color: "grey",
@@ -119,7 +121,7 @@ export default defineComponent({
 
     return {
       tab: ref("nav1"),
-      userMajor: ref(),
+      userMajor,
       isLoggedIn,
       logout,
       isMobile,
