@@ -1,7 +1,9 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header
-      :class="isMobile ? 'column content-center' : 'row justify-between'"
+      :class="
+        isMobile ? 'column q-gutter-sm content-center' : 'row justify-between'
+      "
       class="items-center q-py-md bg-dark text-white"
       style="padding-left: 10vw; padding-right: 10vw"
       elevated

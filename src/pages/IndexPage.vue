@@ -1,5 +1,12 @@
 <template>
-  <q-page class="q-py-md" style="padding-left: 10vw; padding-right: 10vw">
+  <q-page
+    class="q-py-md"
+    :style="
+      isMobile
+        ? 'padding-left: 10px; padding-right: 10px'
+        : 'padding-left: 10vw; padding-right: 10vw'
+    "
+  >
     <div class="q-gutter-sm">
       <div class="text-subtitle2">전공게시판</div>
       <q-list bordered separator>
