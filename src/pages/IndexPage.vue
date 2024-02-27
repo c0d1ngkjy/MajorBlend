@@ -11,7 +11,7 @@
         <q-item
           clickable
           @click="$router.push(`boards/${bid}/posts/${post.pid}`)"
-          v-for="post in majorBoardArray"
+          v-for="post in sortedMajorArray"
           :key="post"
         >
           <q-item-section>
@@ -34,15 +34,13 @@
 
       <div class="text-subtitle2 q-mt-lg">통합게시판</div>
       <q-list bordered separator>
-        <q-item v-if="majorBoardArray.length == 0">
-          <q-item-section
-            >해당 전공게시판에 등록된 글이 없습니다</q-item-section
-          >
+        <q-item v-if="mainBoardArray.length == 0">
+          <q-item-section>통합게시판에 등록된 글이 없습니다</q-item-section>
         </q-item>
         <q-item
           clickable
-          @click="$router.push(`boards/${bid}/posts/${post.pid}`)"
-          v-for="post in majorBoardArray"
+          @click="$router.push(`boards/${mainBoardId}/posts/${post.pid}`)"
+          v-for="post in sortedMainArray"
           :key="post"
         >
           <q-item-section>
@@ -68,7 +66,11 @@
 
 <script>
 import { Screen } from "quasar";
-import { getAllPosts } from "src/services/board";
+import {
+  getAllPosts,
+  getAllPostsFromIntegratedBoard,
+  getMainBoardId,
+} from "src/services/board";
 import { getUserData } from "src/services/user";
 import { useAuthStore } from "src/stores/authStore";
 import { computed, defineComponent, onMounted, ref } from "vue";
@@ -81,11 +83,31 @@ export default defineComponent({
 
     const isMobile = computed(() => Screen.lt.sm);
     const majorBoardArray = ref([]);
+    const mainBoardArray = ref([]);
     const bid = ref();
+    const mainBoardId = ref();
+
+    const sortedMajorArray = computed(() => {
+      const copyArray = [...majorBoardArray.value];
+
+      copyArray.sort((a, b) => b.createdDate.seconds - a.createdDate.seconds);
+
+      return copyArray;
+    });
+
+    const sortedMainArray = computed(() => {
+      const copyArray = [...mainBoardArray.value];
+
+      copyArray.sort((a, b) => b.createdDate.seconds - a.createdDate.seconds);
+
+      return copyArray;
+    });
 
     onMounted(async () => {
       const userData = await getUserData(authStore.user.uid);
       majorBoardArray.value = await getAllPosts(userData.majorBoardId);
+      mainBoardArray.value = await getAllPostsFromIntegratedBoard();
+      mainBoardId.value = await getMainBoardId();
       bid.value = userData.majorBoardId;
       console.log(majorBoardArray.value);
     });
@@ -93,7 +115,11 @@ export default defineComponent({
     return {
       isMobile,
       majorBoardArray,
+      mainBoardId,
       bid,
+      mainBoardArray,
+      sortedMajorArray,
+      sortedMainArray,
     };
   },
 });

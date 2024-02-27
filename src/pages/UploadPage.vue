@@ -1,6 +1,7 @@
 <template>
   <q-page>
     <q-form class="q-gutter-sm q-my-sm" @submit="onSubmit" @reset="onReset">
+      <q-toggle v-model="mainBoard" label="통합게시판"></q-toggle>
       <q-input
         maxlength="35"
         v-model="title"
@@ -50,6 +51,7 @@ export default defineComponent({
     const editor = ref("");
     const bid = ref();
     const userName = ref();
+    const mainBoard = ref(false);
 
     const titleRules = [(val) => !!val || "제목을 입력해주세요"];
     const editorRules = [
@@ -70,6 +72,7 @@ export default defineComponent({
           userName: userName.value,
           title: title.value,
           content: editor.value,
+          isMain: mainBoard.value,
         };
         try {
           const res = await createNewPost(
@@ -86,7 +89,7 @@ export default defineComponent({
             message: "글 등록 완료",
           });
 
-          $router.push(`boards/${bid.value}/posts/${res}`);
+          $router.push(`boards/${res.boardId}/posts/${res.postId}`);
         } catch (error) {
           console.error(error);
 
@@ -114,7 +117,7 @@ export default defineComponent({
 
     onMounted(async () => {
       const userData = await getUserData(authStore.user.uid);
-      userName.value = userData.name;
+      userName.value = userData.nickName;
       bid.value = userData.majorBoardId;
     });
 
@@ -125,6 +128,7 @@ export default defineComponent({
       editorRules,
       onReset,
       onSubmit,
+      mainBoard,
     };
   },
 });

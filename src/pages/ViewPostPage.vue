@@ -1,14 +1,17 @@
 <template>
-  <q-page>
-    <div class="text-h5">{{ postData.title }}</div>
-    <div>{{ postData.userName }}</div>
-    <div>
-      {{ postData.createdDate }}
+  <q-page class="q-py-md">
+    <div class="text-h6">{{ postData.title }}</div>
+    <div class="row justify-between items-end text-caption">
+      <div>글쓴이 : {{ postData.userName }}</div>
+
+      <div class="column items-end">
+        <div>조회수 : {{ postData.views }}</div>
+        <div>작성일 : {{ postData.createdDate }}</div>
+      </div>
     </div>
 
-    <div>{{ postData.views }}</div>
     <q-separator></q-separator>
-    <div v-html="postData.content" />
+    <div class="q-py-sm" v-html="postData.content" />
   </q-page>
 </template>
 

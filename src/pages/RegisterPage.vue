@@ -11,8 +11,19 @@
         </div>
 
         <div>
+          <div>아이디 (닉네임)</div>
+          <q-input
+            maxlength="10"
+            dense
+            v-model="nickNameInput"
+            :rules="nickNameRules"
+          ></q-input>
+        </div>
+
+        <div>
           <div>비밀번호</div>
           <q-input
+            maxlength="12"
             dense
             v-model="pwInput"
             :rules="pwRules"
@@ -23,6 +34,7 @@
         <div>
           <div>비밀번호 확인</div>
           <q-input
+            maxlength="12"
             dense
             v-model="pwCheck"
             :rules="pwCheckRules"
@@ -32,7 +44,12 @@
 
         <div>
           <div>이름 (실명)</div>
-          <q-input dense v-model="nameInput" :rules="nameRules"></q-input>
+          <q-input
+            maxlength="6"
+            dense
+            v-model="nameInput"
+            :rules="nameRules"
+          ></q-input>
         </div>
 
         <div>
@@ -40,7 +57,12 @@
           <div class="text-caption text-red">
             전공은 회원가입 이후 변경 불가합니다
           </div>
-          <q-input dense v-model="majorInput" :rules="majorRules"></q-input>
+          <q-input
+            maxlength="20"
+            dense
+            v-model="majorInput"
+            :rules="majorRules"
+          ></q-input>
         </div>
 
         <div class="row q-gutter-sm">
@@ -83,6 +105,7 @@ export default defineComponent({
     const pwCheck = ref("");
     const nameInput = ref("");
     const majorInput = ref("");
+    const nickNameInput = ref("");
 
     const emailRules = [
       (val) => !!val || "이메일을 입력해주세요",
@@ -102,6 +125,7 @@ export default defineComponent({
     ];
 
     const nameRules = [(val) => !!val || "이름을 입력해주세요"];
+    const nickNameRules = [(val) => !!val || "아이디를 입력해주세요"];
 
     const majorRules = [(val) => !!val || "전공을 입력해주세요"];
 
@@ -111,6 +135,7 @@ export default defineComponent({
           email: emailInput.value,
           pw: pwInput.value,
           name: nameInput.value,
+          nickName: nickNameInput.value,
           major: majorInput.value,
         };
 
@@ -162,6 +187,7 @@ export default defineComponent({
       pwCheck.value = "";
       nameInput.value = "";
       majorInput.value = "";
+      nickNameInput.value = "";
     }
 
     function validateForm() {
@@ -170,7 +196,8 @@ export default defineComponent({
         pwRules.every((rule) => rule(pwInput.value)) &&
         pwCheckRules.every((rule) => rule(pwCheck.value)) &&
         nameRules.every((rule) => rule(nameInput.value)) &&
-        majorRules.every((rule) => rule(majorInput.value))
+        majorRules.every((rule) => rule(majorInput.value)) &&
+        nickNameRules.every((rule) => rule(nickNameInput.value))
       );
     }
 
@@ -179,9 +206,11 @@ export default defineComponent({
       pwInput,
       pwCheck,
       nameInput,
+      nickNameInput,
       majorInput,
       emailRules,
       pwRules,
+      nickNameRules,
       pwCheckRules,
       nameRules,
       majorRules,

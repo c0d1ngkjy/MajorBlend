@@ -73,16 +73,35 @@ export async function createNewPost(uid, bid, postData) {
   };
 
   try {
-    const boardRef = doc(firestore, "boards", bid);
-    const postsRef = collection(boardRef, "posts");
+    let docRef;
+    let boardId = bid;
 
-    const docRef = await addDoc(postsRef, post);
+    if (postData.isMain) {
+      const q = query(
+        collection(firestore, "boards"),
+        where("boardName", "==", "통합게시판")
+      );
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const integrationBoardRef = querySnapshot.docs[0].ref;
+        const integrationPostsRef = collection(integrationBoardRef, "posts");
+        docRef = await addDoc(integrationPostsRef, post);
+        boardId = integrationBoardRef.id;
+      } else {
+        console.log("통합게시판 board does not exist");
+      }
+    } else {
+      const boardRef = doc(firestore, "boards", bid);
+      const postsRef = collection(boardRef, "posts");
+      docRef = await addDoc(postsRef, post);
+    }
 
     await setDoc(docRef, { pid: docRef.id }, { merge: true });
 
     console.log("Post created");
 
-    return docRef.id;
+    return { postId: docRef.id, boardId };
   } catch (error) {
     console.error("Error creating new post:", error);
     throw error;
@@ -110,6 +129,39 @@ export async function getAllPosts(bid) {
   }
 }
 
+export async function getAllPostsFromIntegratedBoard() {
+  try {
+    const q = query(
+      collection(firestore, "boards"),
+      where("boardName", "==", "통합게시판")
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const integrationBoardRef = querySnapshot.docs[0].ref;
+
+      const integrationPostsRef = collection(integrationBoardRef, "posts");
+
+      const querySnapshotPosts = await getDocs(integrationPostsRef);
+
+      const posts = querySnapshotPosts.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      console.log("All post documents from '통합게시판' retrieved");
+
+      return posts;
+    } else {
+      console.log("통합게시판 board does not exist");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error getting all post documents from '통합게시판':", error);
+    throw error;
+  }
+}
+
 export async function getSinglePost(bid, pid) {
   try {
     const postRef = doc(firestore, "boards", bid, "posts", pid);
@@ -131,6 +183,26 @@ export async function getSinglePost(bid, pid) {
     }
   } catch (error) {
     console.error("Error getting post document:", error);
+    throw error;
+  }
+}
+
+export async function getMainBoardId() {
+  try {
+    const q = query(
+      collection(firestore, "boards"),
+      where("boardName", "==", "통합게시판")
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      return querySnapshot.docs[0].id;
+    } else {
+      console.log("통합게시판 board does not exist");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting main board ID:", error);
     throw error;
   }
 }

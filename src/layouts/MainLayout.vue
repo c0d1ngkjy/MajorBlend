@@ -74,12 +74,14 @@ import { useAuthStore } from "src/stores/authStore";
 import { logoutUser } from "src/services/auth";
 import { Screen, useQuasar } from "quasar";
 import { getUserMajor } from "src/services/user";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "MainLayout",
 
   setup() {
     const $q = useQuasar();
+    const $router = useRouter();
     const authStore = useAuthStore();
     const isAuthenticated = computed(() => authStore.isUserAuthenticated);
     const isMobile = computed(() => Screen.lt.sm);
@@ -113,6 +115,7 @@ export default defineComponent({
             textColor: "white",
             message: "로그아웃 성공",
           });
+          $router.push("/login");
         })
         .catch((error) => {
           console.error("Error logging out:", error);
