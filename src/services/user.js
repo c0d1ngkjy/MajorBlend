@@ -47,7 +47,7 @@ export async function addMajorBoardIdToUserData(uid, majorBoardId) {
       majorBoardId: majorBoardId,
     });
 
-    console.log("Major board ID added to user data successfully!");
+    console.log("Major board ID added to user data");
   } catch (error) {
     console.error("Error adding major board ID to user data:", error);
     throw error;

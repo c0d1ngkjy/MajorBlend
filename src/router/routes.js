@@ -7,6 +7,10 @@ const routes = [
       { path: "login", component: () => import("pages/LoginPage.vue") },
       { path: "register", component: () => import("pages/RegisterPage.vue") },
       { path: "nwpost", component: () => import("pages/UploadPage.vue") },
+      {
+        path: "boards/:bid/posts/:pid",
+        component: () => import("pages/ViewPostPage.vue"),
+      },
     ],
   },
 

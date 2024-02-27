@@ -29,11 +29,6 @@
         >
       </div>
     </q-form>
-
-    <q-card flat bordered>
-      <div>{{ title }}</div>
-      <div v-html="editor" />
-    </q-card>
   </q-page>
 </template>
 
@@ -91,7 +86,7 @@ export default defineComponent({
             message: "글 등록 완료",
           });
 
-          //$router.push("/board/");
+          $router.push(`boards/${bid.value}/posts/${res}`);
         } catch (error) {
           console.error(error);
 
