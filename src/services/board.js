@@ -206,3 +206,58 @@ export async function getMainBoardId() {
     throw error;
   }
 }
+
+//comments
+export async function addNewComment(bid, pid, commentData) {
+  try {
+    const commentsRef = collection(
+      firestore,
+      "boards",
+      bid,
+      "posts",
+      pid,
+      "comments"
+    );
+
+    const newComment = {
+      userName: commentData.userName,
+      content: commentData.content,
+      createdDate: new Date(),
+    };
+
+    const docRef = await addDoc(commentsRef, newComment);
+
+    console.log("New comment added successfully!");
+
+    return docRef.id;
+  } catch (error) {
+    console.error("Error adding new comment:", error);
+    throw error;
+  }
+}
+
+export async function getAllComments(bid, pid) {
+  try {
+    const commentsRef = collection(
+      firestore,
+      "boards",
+      bid,
+      "posts",
+      pid,
+      "comments"
+    );
+    const querySnapshot = await getDocs(commentsRef);
+
+    const comments = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    console.log("All comments retrieved successfully!");
+
+    return comments;
+  } catch (error) {
+    console.error("Error getting all comments:", error);
+    throw error;
+  }
+}

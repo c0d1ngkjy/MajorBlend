@@ -1,13 +1,30 @@
 <template>
   <q-page
-    class="q-py-md"
+    class="q-py-md row justify-between"
     :style="
       isMobile
         ? 'padding-left: 10px; padding-right: 10px'
-        : 'padding-left: 10vw; padding-right: 10vw'
+        : 'padding-left: 7vw; padding-right: 7vw'
     "
   >
-    <div class="q-gutter-sm">
+    <div class="col-2 q-pa-sm">
+      <q-card
+        flat
+        bordered
+        square
+        class="flex flex-center"
+        style="max-height: 240px"
+      >
+        <q-card-section>
+          <q-img width="3vw" src="~assets/account.png"></q-img>
+        </q-card-section>
+        <q-card-section class="text-bold">{{
+          userData.nickName
+        }}</q-card-section>
+      </q-card>
+    </div>
+
+    <div class="q-gutter-sm col-10">
       <div class="text-subtitle2">전공게시판</div>
       <q-list bordered separator>
         <q-item v-if="majorBoardArray.length == 0">
@@ -21,10 +38,13 @@
           v-for="post in sortedMajorArray"
           :key="post"
         >
+          <q-item-section v-if="post.views >= 3" avatar>
+            <q-img
+              src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjZmMnpvMzdveWZ5Yjk3MWRtbTIwOTlqZHQ5Mm85NjJ0ZTV6ODVzOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Lopx9eUi34rbq/giphy.gif"
+            ></q-img>
+          </q-item-section>
           <q-item-section>
-            <q-item-label
-              >{{ post.title }} <span class="text-red">[댓글count]</span>
-            </q-item-label>
+            <q-item-label>{{ post.title }} </q-item-label>
             <q-item-label caption>{{ post.userName }}</q-item-label>
           </q-item-section>
           <q-item-section side>
@@ -50,10 +70,13 @@
           v-for="post in sortedMainArray"
           :key="post"
         >
+          <q-item-section v-if="post.views >= 3" avatar>
+            <q-img
+              src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjZmMnpvMzdveWZ5Yjk3MWRtbTIwOTlqZHQ5Mm85NjJ0ZTV6ODVzOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Lopx9eUi34rbq/giphy.gif"
+            ></q-img>
+          </q-item-section>
           <q-item-section>
-            <q-item-label
-              >{{ post.title }} <span class="text-red">[댓글count]</span>
-            </q-item-label>
+            <q-item-label>{{ post.title }} </q-item-label>
             <q-item-label caption>{{ post.userName }}</q-item-label>
           </q-item-section>
           <q-item-section side>
@@ -87,6 +110,7 @@ export default defineComponent({
 
   setup() {
     const authStore = useAuthStore();
+    const userData = ref({});
 
     const isMobile = computed(() => Screen.lt.sm);
     const majorBoardArray = ref([]);
@@ -111,11 +135,11 @@ export default defineComponent({
     });
 
     onMounted(async () => {
-      const userData = await getUserData(authStore.user.uid);
-      majorBoardArray.value = await getAllPosts(userData.majorBoardId);
+      userData.value = await getUserData(authStore.user.uid);
+      majorBoardArray.value = await getAllPosts(userData.value.majorBoardId);
       mainBoardArray.value = await getAllPostsFromIntegratedBoard();
       mainBoardId.value = await getMainBoardId();
-      bid.value = userData.majorBoardId;
+      bid.value = userData.value.majorBoardId;
       console.log(majorBoardArray.value);
     });
 
@@ -125,6 +149,7 @@ export default defineComponent({
       mainBoardId,
       bid,
       mainBoardArray,
+      userData,
       sortedMajorArray,
       sortedMainArray,
     };
