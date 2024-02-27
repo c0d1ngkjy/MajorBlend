@@ -69,6 +69,8 @@ import { useQuasar } from "quasar";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { registerUser } from "../services/auth";
+import { checkOrCreateBoard } from "src/services/board";
+import { addMajorBoardIdToUserData } from "src/services/user";
 
 export default defineComponent({
   name: "RegisterPage",
@@ -119,6 +121,13 @@ export default defineComponent({
             userData
           );
           console.log(res);
+
+          const majorBoardId = await checkOrCreateBoard(userData.major);
+          console.log(majorBoardId);
+
+          const e = await addMajorBoardIdToUserData(res.uid, majorBoardId);
+          console.log(e);
+
           $q.notify({
             color: "primary",
             textColor: "white",
@@ -129,6 +138,7 @@ export default defineComponent({
           $router.push("/login");
         } catch (error) {
           console.error(error);
+
           $q.notify({
             color: "red-5",
             textColor: "white",
